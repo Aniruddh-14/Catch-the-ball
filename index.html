@@ -1,16 +1,16 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=\, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Catch the Ball Game</title>
     <style>
         body {
             text-align: center;
-            background-color: #f0f0f0;
+            background-color: #f4f4f4;
             font-family: Arial, sans-serif;
         }
         canvas {
-            background: #cfcfcf;
+            background: #ddd;
             display: block;
             margin: 20px auto;
             border: 2px solid black;
@@ -22,44 +22,42 @@
     <canvas id="gameCanvas" width="400" height="500"></canvas>
     <script>
         const canvas = document.getElementById("gameCanvas");
-        const context = canvas.getContext("2d");
+        const ctx = canvas.getContext("2d");
 
-        let basket = { x: 175, y: 450, width: 60, height: 12 };
-      
-        let ball = { x: Math.random() * 380, y: 0, radius: 12, dy: 3 };
-        
+        let basket = { x: 175, y: 450, width: 50, height: 10 };
+        let ball = { x: Math.random() * 380, y: 0, radius: 10, dy: 3 };
         let score = 0;
 
-      
-        document.addEventListener("keydown", (event) => {
+        document.addEventListener("keydown", moveBasket);
+
+        function moveBasket(event) {
             if (event.key === "ArrowLeft" && basket.x > 0) {
                 basket.x -= 20;
             } else if (event.key === "ArrowRight" && basket.x < canvas.width - basket.width) {
                 basket.x += 20;
             }
-        });
+        }
 
         function drawBasket() {
-            context.fillStyle = "blue";
-            context.fillRect(basket.x, basket.y, basket.width, basket.height);
+            ctx.fillStyle = "blue";
+            ctx.fillRect(basket.x, basket.y, basket.width, basket.height);
         }
 
         function drawBall() {
-            context.beginPath();
-            context.arc(ball.x, ball.y, ball.radius, 0, Math.PI * 2);
-            context.fillStyle = "red";
-            context.fill();
-            context.closePath();
+            ctx.beginPath();
+            ctx.arc(ball.x, ball.y, ball.radius, 0, Math.PI * 2);
+            ctx.fillStyle = "red";
+            ctx.fill();
+            ctx.closePath();
         }
 
         function updateGame() {
-            context.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
             drawBasket();
             drawBall();
 
-         
             ball.y += ball.dy;
-    
+            
             if (
                 ball.y + ball.radius >= basket.y &&
                 ball.x >= basket.x &&
@@ -68,13 +66,13 @@
                 score++;
                 resetBall();
             } else if (ball.y > canvas.height) {
-                alert(Game Over! Your Score: ${score});
-                location.reload();
+                alert("Game Over! Your Score: " + score);
+                document.location.reload();
             }
         }
 
         function resetBall() {
-            ball.x = Math.random() * (canvas.width - ball.radius * 2) + ball.radius;
+            ball.x = Math.random() * 380;
             ball.y = 0;
         }
 
